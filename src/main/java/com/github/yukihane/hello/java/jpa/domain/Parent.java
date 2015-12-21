@@ -10,6 +10,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -25,7 +26,8 @@ public class Parent implements Serializable {
     private String parentName;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "join_id", referencedColumnName = "join_id")
+    @JoinColumns({ @JoinColumn(name = "join_id", referencedColumnName = "join_id"),
+            @JoinColumn(name = "child_id", referencedColumnName = "child_id") })
     private List<Child> childList;
 
     /** getter,setter省略 **/

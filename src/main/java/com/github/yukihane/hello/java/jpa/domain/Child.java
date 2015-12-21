@@ -7,6 +7,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -19,7 +20,8 @@ public class Child implements Serializable {
     @Column(name = "child_name")
     private String childName;
     @ManyToOne
-    @JoinColumn(name = "join_id", referencedColumnName = "join_id")
+    @JoinColumns({ @JoinColumn(name = "join_id", referencedColumnName = "join_id"),
+            @JoinColumn(name = "parent_id", referencedColumnName = "parent_id") })
     private Parent parent;
 
     /** getter,setter省略 **/
