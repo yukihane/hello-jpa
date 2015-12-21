@@ -24,6 +24,9 @@ public class Child implements Serializable {
             @JoinColumn(name = "parent_id", referencedColumnName = "parent_id") })
     private Parent parent;
 
+    @Column(name = "parent_id")
+    private String parentId;
+
     /** getter,setter省略 **/
 
     @Embeddable

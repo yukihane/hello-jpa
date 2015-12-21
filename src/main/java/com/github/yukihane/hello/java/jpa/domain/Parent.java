@@ -30,6 +30,9 @@ public class Parent implements Serializable {
             @JoinColumn(name = "child_id", referencedColumnName = "child_id") })
     private List<Child> childList;
 
+    @Column(name = "child_id")
+    private String childId;
+
     /** getter,setter省略 **/
 
     @Embeddable
