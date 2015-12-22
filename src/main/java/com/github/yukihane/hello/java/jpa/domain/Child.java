@@ -1,14 +1,13 @@
 package com.github.yukihane.hello.java.jpa.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Table(name = "child_table")
@@ -19,10 +18,9 @@ public class Child implements Serializable {
     private ChildKey childKey = new ChildKey();
     @Column(name = "child_name")
     private String childName;
-    @ManyToOne
-    @JoinColumns({ @JoinColumn(name = "join_id", referencedColumnName = "join_id"),
-            @JoinColumn(name = "parent_id", referencedColumnName = "parent_id") })
-    private Parent parent;
+
+    @JoinColumn(name = "parent_id", referencedColumnName = "parent_id")
+    private List<Parent> parents;
 
     @Column(name = "parent_id")
     private String parentId;
@@ -34,7 +32,7 @@ public class Child implements Serializable {
         private static final long serialVersionUID = -3848325403357861609L;
         @Column(name = "child_id")
         String childId;
-        @Column(name = "join_id")
+        @Column(name = "parent_id")
         String joinId;
     }
 

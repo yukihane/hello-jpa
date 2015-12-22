@@ -26,8 +26,7 @@ public class Parent implements Serializable {
     private String parentName;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumns({ @JoinColumn(name = "join_id", referencedColumnName = "join_id"),
-            @JoinColumn(name = "child_id", referencedColumnName = "child_id") })
+    @JoinColumn(name = "parent_id", referencedColumnName = "parent_id")
     private List<Child> childList;
 
     @Column(name = "child_id")
