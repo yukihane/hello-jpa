@@ -1,67 +1,91 @@
 package com.github.yukihane.hello.java.jpa.jpa;
 
-import java.util.List;
-
+import com.github.yukihane.hello.java.jpa.domain.MyOrder;
+import com.github.yukihane.hello.java.jpa.domain.Product;
+import com.github.yukihane.hello.java.jpa.domain.Product_;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-
-import com.github.yukihane.hello.java.jpa.domain.Employee;
-import com.github.yukihane.hello.java.jpa.domain.Department;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 public class JpaTest {
 
-	private EntityManager manager;
+    @FunctionalInterface
+    public interface Executable {
+        void exec(EntityManager em);
+    }
 
-	public JpaTest(EntityManager manager) {
-		this.manager = manager;
-	}
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("persistenceUnit");
-		EntityManager manager = factory.createEntityManager();
-		JpaTest test = new JpaTest(manager);
+    public static void main(String[] args) {
 
-		EntityTransaction tx = manager.getTransaction();
-		tx.begin();
-		try {
-			test.createEmployees();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		tx.commit();
+        new JpaTest().exec();
+    }
 
-		test.listEmployees();
+    private void exec() {
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("h2");
 
-		System.out.println(".. done");
-	}
+        try {
 
+            EntityManager em = factory.createEntityManager();
+            try {
+                EntityTransaction tx = em.getTransaction();
+                tx.begin();
+                insertProducts(em);
+                insertOrders(em);
+                tx.commit();
 
+                EntityTransaction tx2 = em.getTransaction();
+                tx2.begin();
+                updateProduct(em);
+                tx2.commit();
+            } finally {
+                em.close();
+            }
 
+        } finally {
+            factory.close();
+        }
+    }
 
-	private void createEmployees() {
-		int numOfEmployees = manager.createQuery("Select a From Employee a", Employee.class).getResultList().size();
-		if (numOfEmployees == 0) {
-			Department department = new Department("java");
-			manager.persist(department);
+    private void insertProducts(EntityManager em) {
+        Product p1 = new Product("test1");
+        Product p2 = new Product("test2");
+        em.persist(p1);
+        em.persist(p2);
+    }
 
-			manager.persist(new Employee("Jakab Gipsz",department));
-			manager.persist(new Employee("Captain Nemo",department));
+    private void insertOrders(EntityManager em) {
 
-		}
-	}
+        Product p1 = findProduct(em, "test1");
 
+        MyOrder o1 = new MyOrder("order1");
+        o1.setProduct(p1);
+        em.persist(o1);
 
-	private void listEmployees() {
-		List<Employee> resultList = manager.createQuery("Select a From Employee a", Employee.class).getResultList();
-		System.out.println("num of employess:" + resultList.size());
-		for (Employee next : resultList) {
-			System.out.println("next employee: " + next);
-		}
-	}
+        MyOrder o2 = new MyOrder("order2");
+        o2.setProduct(p1);
+        em.persist(o2);
+    }
 
+    /**
+     * @param em
+     * @return
+     */
+    private Product findProduct(EntityManager em, String name) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery <Product> query = cb.createQuery(Product.class);
+        Root <Product> r = query.from(Product.class);
+        query.select(r);
+        query.where(cb.equal(r.get(Product_.name), name));
+        Product p1 = em.createQuery(query).getSingleResult();
+        return p1;
+    }
 
+    private void updateProduct(EntityManager em) {
+        Product p1 = findProduct(em, "test1");
+        p1.setName("test11");
+        em.persist(p1);
+    }
 }
