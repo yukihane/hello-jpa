@@ -3,14 +3,15 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
   version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 
-  <persistence-unit name="h2" transaction-type="RESOURCE_LOCAL">
+  <persistence-unit name="mypu" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <properties>
       <property name="hibernate.archive.autodetection" value="class" />
-      <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
-      <property name="hibernate.connection.driver_class" value="org.h2.Driver" />
-      <property name="hibernate.connection.url" value="jdbc:h2:./target/h2-1" />
-      <property name="hibernate.connection.user" value="sa" />
+      <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2012Dialect" />
+      <property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+      <property name="hibernate.connection.url" value="jdbc:sqlserver://172.30.235.89:1433;DatabaseName=mytestdb" />
+      <property name="hibernate.connection.user" value="testuser" />
+      <property name="hibernate.connection.password" value="testuser" />
             <!-- <property name="hibernate.show_sql" value="true"/> -->
       <property name="hibernate.flushMode" value="FLUSH_AUTO" />
       <property name="hibernate.hbm2ddl.auto" value="update" />

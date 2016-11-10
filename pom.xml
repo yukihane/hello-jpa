@@ -10,14 +10,16 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <hibernate.version>5.0.10.Final</hibernate.version>
+    <hibernate.version>5.0.11.Final</hibernate.version>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>1.4.193</version>
+      <groupId>com.microsoft</groupId>
+      <artifactId>sqljdbc</artifactId>
+      <version>6.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/sqljdbc42.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
